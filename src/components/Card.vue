@@ -4,6 +4,14 @@
       <img :src="image" :alt="name" />
     </figure>
     <h1>{{ name }}</h1>
+    <div class="card--type">
+      <span
+        v-for="type in types"
+        :key="type.type.slot"
+        :class="type.type.name"
+        >{{ type.type.name }}</span
+      >
+    </div>
   </div>
 </template>
 
@@ -13,27 +21,86 @@ export default {
   props: {
     image: String,
     name: String,
+    types: Array,
   },
 };
 </script>
 
 <style lang="scss">
+@import "../css/variables.scss";
 .card {
-  border: 1px solid black;
-  box-shadow: 0px 0px 10px black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgb(112, 112, 112);
+  box-shadow: 0px 0px 10px rgb(187, 187, 187);
   border-radius: 10px;
-  height: 300px;
-  width: 250px;
+  height: 150px;
+  width: 120px;
+  background-color: rgba(210, 222, 255, 0.598);
+
+  h1 {
+    font-size: calc(1em + 1.1vw);
+  }
 }
 .card--figure {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 50%;
-
-  background-color: aqua;
+  width: 50%;
   > img {
-    width: 30%;
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+  }
+}
+
+.card--type {
+  display: flex;
+  gap: 5px;
+  > span {
+    color: rgb(44, 44, 44);
+    font-weight: 500;
+    font-size: calc(0.8em + 1vw);
+    padding: 2.5px;
+    border-radius: 5px;
+  }
+  .fire {
+    background-color: rgb(255, 86, 86);
+  }
+  .water {
+    background-color: rgb(92, 173, 255);
+  }
+  .grass {
+    background-color: rgb(1, 176, 1);
+  }
+  .electric {
+    background-color: rgb(255, 255, 0);
+  }
+  .ground {
+    background-color: rgba(42, 17, 17, 0.72);
+  }
+}
+
+@media (min-width: 768px) {
+  .card {
+    height: 200px;
+    width: 170px;
+  }
+}
+
+@media (min-width: 768px) {
+  .card {
+    height: 200px;
+    width: 170px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    height: 250px;
+    width: 220px;
   }
 }
 </style>
