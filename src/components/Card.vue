@@ -62,7 +62,7 @@ export default {
   > span {
     color: rgb(44, 44, 44);
     font-weight: 500;
-    font-size: calc(0.8em + 1vw);
+    font-size: calc(0.4em + 1vw);
     padding: 2.5px;
     border-radius: 5px;
   }

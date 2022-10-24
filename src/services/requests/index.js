@@ -1,16 +1,16 @@
 import { api } from "../api";
 
-const getPokemons = async (limit) => {
+const getPokemons = async (perPage, pageNumber) => {
   const { data } = await api.get("pokemon", {
     params: {
-      limit,
-      offset: limit,
+      limit: perPage,
+      offset: pageNumber,
     },
   });
 
   const pokemons = await Promise.all(getPokemonsByNameOrId(data.results));
-  console.log(pokemons);
-  return pokemons;
+
+  return { count: data.count, pokemons };
 };
 
 const getPokemonsByNameOrId = (array) => {
