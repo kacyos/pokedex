@@ -48,7 +48,6 @@ export default {
     async handlePage(pageNumber) {
       const response = await getPokemons(20, pageNumber);
       this.pokemons = response?.pokemons;
-      console.log(response.pokemons);
     },
   },
 };
