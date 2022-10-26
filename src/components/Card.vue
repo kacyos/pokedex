@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" @click="$emit('click')">
     <figure class="card--figure">
       <img :src="image" :alt="name" />
     </figure>
@@ -38,6 +38,7 @@ export default {
   height: 150px;
   width: 120px;
   background-color: rgba(210, 222, 255, 0.598);
+  cursor: pointer;
 
   h1 {
     font-size: calc(1em + 1.1vw);
@@ -67,19 +68,24 @@ export default {
     border-radius: 5px;
   }
   .fire {
-    background-color: rgb(255, 86, 86);
+    background-color: rgb(255, 86, 86, 0.524);
+    color: #fff;
   }
   .water {
     background-color: rgb(92, 173, 255);
+    color: #fff;
   }
   .grass {
     background-color: rgb(1, 176, 1);
+    color: #fff;
   }
   .electric {
-    background-color: rgb(255, 255, 0);
+    background-color: rgb(255, 255, 0, 0.524);
+    color: rgb(104, 104, 104);
   }
   .ground {
-    background-color: rgba(42, 17, 17, 0.72);
+    background-color: rgba(42, 17, 17, 0.524);
+    color: #000;
   }
 }
 

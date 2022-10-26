@@ -1,25 +1,56 @@
 import { api } from "../api";
 
 const getPokemons = async (perPage, pageNumber) => {
-  const { data } = await api.get("pokemon", {
-    params: {
-      limit: perPage,
-      offset: pageNumber,
-    },
-  });
+  try {
+    const { data } = await api.get("pokemon", {
+      params: {
+        limit: perPage,
+        offset: pageNumber,
+      },
+    });
 
-  const pokemons = await Promise.all(getPokemonsByNameOrId(data.results));
+    const response = data?.results?.map(async (item) => {
+      const pokemon = await getPokemonsByNameOrId(item.name);
+      return pokemon;
+    });
 
-  return { count: data.count, pokemons };
+    const pokemons = await Promise.all(response);
+    return { count: data.count, pokemons };
+  } catch {
+    console.error("Falha ao buscar pokemons.");
+  }
 };
 
-const getPokemonsByNameOrId = (array) => {
-  const response = array.map(async (item) => {
-    const { data } = await api.get(`pokemon/${item.name}`);
+const getPokemonsByNameOrId = async (idOrName) => {
+  try {
+    const { data } = await api.get(`pokemon/${idOrName}`);
     return data;
-  });
-
-  return response;
+  } catch {
+    console.error("Falha ao buscar pokemon por nome ou id");
+  }
 };
 
-export { getPokemons };
+const getPokemonSpecie = async (name) => {
+  try {
+    const { data } = await api.get(`pokemon-species/${name}`);
+    return data;
+  } catch (error) {
+    console.error("Falha ao buscar specie.");
+  }
+};
+
+const getEvolutionChain = async (specieId) => {
+  try {
+    const { data } = await api.get(`evolution-chain/${specieId}`);
+    return data;
+  } catch (error) {
+    console.error("Falha ao buscar Evolution Chain.");
+  }
+};
+
+export {
+  getPokemons,
+  getPokemonsByNameOrId,
+  getPokemonSpecie,
+  getEvolutionChain,
+};

@@ -2,6 +2,7 @@
 import { getPokemons } from "../services/requests";
 import Card from "../components/Card.vue";
 import Paginator from "@/components/Paginator.vue";
+import Modal from "@/components/Modal.vue";
 </script>
 
 <template>
@@ -12,8 +13,14 @@ import Paginator from "@/components/Paginator.vue";
           :image="pokemon.sprites.other['official-artwork'].front_default"
           :name="pokemon.name"
           :types="pokemon.types"
+          @click="handleModal(pokemon.id)"
         />
       </li>
+      <Modal
+        v-if="modalIsOpen"
+        @close="modalIsOpen = false"
+        :pokemon="pokemon"
+      />
     </ul>
     <Paginator :total="count" :perPage="perPage" :handlePage="handlePage" />
   </main>
@@ -27,6 +34,8 @@ export default {
       perPage: 0,
       count: 0,
       pokemons: [],
+      modalIsOpen: false,
+      pokemon: "",
     };
   },
   components: {
@@ -48,6 +57,13 @@ export default {
     async handlePage(pageNumber) {
       const response = await getPokemons(20, pageNumber);
       this.pokemons = response?.pokemons;
+    },
+
+    async handleModal(id) {
+      const pokemon = this.pokemons.find((pokemon) => pokemon.id === id);
+      this.pokemon = pokemon;
+      this.modalIsOpen = true;
+      console.log(pokemon);
     },
   },
 };
