@@ -8,7 +8,12 @@
       </button>
     </li>
     <span v-if="currentPage != totalPages">...</span>
-    <button v-if="currentPage != totalPages">{{ totalPages }}</button>
+    <button
+      v-if="currentPage != totalPages"
+      @click="handlePage(perPage * (totalPages - 1))"
+    >
+      {{ totalPages }}
+    </button>
   </ul>
 </template>
 

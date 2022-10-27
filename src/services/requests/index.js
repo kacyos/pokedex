@@ -1,11 +1,13 @@
-import { api } from "../api";
+import axios from "axios";
 
-const getPokemons = async (perPage, pageNumber) => {
+const baseURL = "https://pokeapi.co/api/v2";
+
+const getPokemons = async (offset) => {
   try {
-    const { data } = await api.get("pokemon", {
+    const { data } = await axios.get(`${baseURL}/pokemon`, {
       params: {
-        limit: perPage,
-        offset: pageNumber,
+        limit: 25,
+        offset,
       },
     });
 
@@ -21,9 +23,9 @@ const getPokemons = async (perPage, pageNumber) => {
   }
 };
 
-const getPokemonsByNameOrId = async (idOrName) => {
+const getPokemonsByNameOrId = async (name) => {
   try {
-    const { data } = await api.get(`pokemon/${idOrName}`);
+    const { data } = await axios.get(`${baseURL}/pokemon/${name}`);
     return data;
   } catch {
     console.error("Falha ao buscar pokemon por nome ou id");
@@ -32,21 +34,38 @@ const getPokemonsByNameOrId = async (idOrName) => {
 
 const getPokemonSpecie = async (name) => {
   try {
-    const { data } = await api.get(`pokemon-species/${name}`);
+    const { data } = await axios.get(`${baseURL}/pokemon-species/${name}`);
     return data;
   } catch (error) {
     console.error("Falha ao buscar specie.");
   }
 };
 
-const getEvolutionChain = async (specieId) => {
+const getEvolutionChain = async (url) => {
   try {
-    const { data } = await api.get(`evolution-chain/${specieId}`);
-    return data;
+    const { data } = await axios.get(url);
+    const evolutions = recursiveSearchEvolution(data.chain);
+    console.log(evolutions);
+    return { evolutions };
   } catch (error) {
     console.error("Falha ao buscar Evolution Chain.");
   }
 };
+
+function recursiveSearchEvolution(array) {
+  const name = array.species.name;
+  const id = parseInt(
+    array.species.url
+      .replace("https://pokeapi.co/api/v2/pokemon-species/", "")
+      .replace("/", "")
+  );
+  array.evolves_to.foreach((e) => console.log(e));
+  return {
+    id,
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    evolutions: [],
+  };
+}
 
 export {
   getPokemons,

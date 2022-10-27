@@ -29,8 +29,12 @@ import { getPokemonSpecie, getEvolutionChain } from "@/services/requests";
             </div>
 
             <div class="description">
-              {{ specie.flavorText?.flavor_text }}
+              {{ specie.description }}
             </div>
+          </div>
+
+          <div :v-for="ev in specie">
+            {{ specie.evolution[0] }}
           </div>
 
           <button class="modal-default-button" @click="$emit('close')">
@@ -49,7 +53,7 @@ export default {
     return {
       name: "",
       specie: {},
-      evolution: "",
+      evolution: [],
     };
   },
   props: {
@@ -63,20 +67,19 @@ export default {
 
   methods: {
     async loadModal() {
-      const pokemonSpecie = await getPokemonSpecie(this.name);
+      const pokemonSpecie = await getPokemonSpecie(this.pokemon.species.name);
       const { id, flavor_text_entries, evolution_chain } = pokemonSpecie;
-      const evolutionChain = await getEvolutionChain(id);
 
-      console.log({ evolutionChain });
-
-      const flavorText = flavor_text_entries?.find(
-        (item) => item.version.name == "shield" && item.language.name == "en"
-      );
+      const { evolutions } = await getEvolutionChain(evolution_chain?.url);
+      console.log(evolutions);
+      const description = flavor_text_entries
+        ?.find((item) => item.language.name == "en")
+        .flavor_text.replace("\f", "");
 
       this.specie = {
         id,
-        flavorText,
-        evolution_chain,
+        description,
+        evolution: [evolutions],
       };
     },
   },
