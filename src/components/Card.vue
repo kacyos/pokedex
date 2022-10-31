@@ -3,13 +3,15 @@
     <figure class="card--figure">
       <img :src="image" :alt="name" />
     </figure>
+
     <h1>{{ name }}</h1>
+
     <div class="card--type">
       <span
-        v-for="type in types"
-        :key="type.type.slot"
-        :class="type.type.name"
-        >{{ type.type.name }}</span
+        v-for="pokemon in types"
+        :key="pokemon.type.slot"
+        :class="pokemon.type.name"
+        >{{ pokemon.type.name }}</span
       >
     </div>
   </div>
