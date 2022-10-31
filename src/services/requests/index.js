@@ -42,13 +42,19 @@ const getPokemonSpecie = async (name) => {
 };
 
 const getEvolutionChain = async (url) => {
-  try {
-    const { data } = await axios.get(url);
-    const evolutions = recursiveSearchEvolution(data.chain);
-    console.log(evolutions);
-    return { evolutions };
-  } catch (error) {
-    console.error("Falha ao buscar Evolution Chain.");
+  if (url) {
+    try {
+      const { data } = await axios.get(url);
+      const result = recursiveSearchEvolution(data.chain);
+      const evolutions = await mapTreeviewNodes(Array(result));
+      const [pokemon] = evolutions;
+      const hasChildren = !!pokemon.children.length;
+      return { evolutions, hasChildren };
+    } catch (error) {
+      console.error("Falha ao buscar Evolution Chain.");
+    }
+  } else {
+    return [];
   }
 };
 
@@ -59,12 +65,27 @@ function recursiveSearchEvolution(array) {
       .replace("https://pokeapi.co/api/v2/pokemon-species/", "")
       .replace("/", "")
   );
-  array.evolves_to.foreach((e) => console.log(e));
+
   return {
     id,
     name: name.charAt(0).toUpperCase() + name.slice(1),
-    evolutions: [],
+    children: array.evolves_to.map((e) => recursiveSearchEvolution(e)),
   };
+}
+
+async function mapTreeviewNodes(items) {
+  const array = items.map(async (i) => {
+    const image = await getPokemonsByNameOrId(i.name.toLowerCase());
+
+    return {
+      id: i.id,
+      name: i.name,
+      imageUrl: image.sprites.other["official-artwork"].front_default,
+      children: await mapTreeviewNodes(i.children),
+    };
+  });
+  const response = await Promise.all(array);
+  return response;
 }
 
 export {

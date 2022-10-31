@@ -3,7 +3,6 @@ import { getPokemons } from "../services/requests";
 import Card from "../components/Card.vue";
 import Paginator from "@/components/Paginator.vue";
 import Modal from "@/components/Modal.vue";
-import Treeview from "@/components/Treeview.vue";
 </script>
 
 <template>
@@ -24,9 +23,6 @@ import Treeview from "@/components/Treeview.vue";
       />
     </ul>
     <Paginator :total="count" :perPage="perPage" :handlePage="handlePage" />
-    <div>
-      <Treeview :items="treeviewItems" />
-    </div>
   </main>
 </template>
 
@@ -40,28 +36,11 @@ export default {
       pokemons: [],
       modalIsOpen: false,
       pokemon: "",
-      treeviewItems: [
-        {
-          key: "fa48d160-a162-406c-b03d-1299b108e048",
-          title: "Primeiro item",
-          children: [
-            {
-              key: "fa48d180-a16a-506c-b03d-1299b108e0445",
-              title: "Primeiro filho item",
-            },
-          ],
-        },
-        {
-          key: "fe8b011d-e5cf-4628-9103-210fbf8a7a59",
-          title: "Segundo item",
-        },
-      ],
     };
   },
   components: {
     Card,
     Paginator,
-    Treeview,
     // HelloWorld,
   },
   created() {

@@ -1,19 +1,25 @@
 <template>
   <ul v-if="total > 1" class="paginator">
-    <button v-if="currentPage > 9">01</button>
-    <span v-if="currentPage > 9">...</span>
-    <li @click="selectCurrentPage" v-for="page in pages" :key="page">
-      <button @click="handlePage(perPage * (page - 1))">
-        {{ page }}
+    <li>
+      <button class="button-first-page" v-if="currentPage">
+        <mdicon name="arrowCollapseLeft" size="18" />
       </button>
     </li>
-    <span v-if="currentPage != totalPages">...</span>
-    <button
-      v-if="currentPage != totalPages"
-      @click="handlePage(perPage * (totalPages - 1))"
-    >
-      {{ totalPages }}
-    </button>
+
+    <li @click="selectCurrentPage" v-for="page in pages" :key="page">
+      <button @click="handlePage(perPage * (page - 1))">
+        {{ page.toLocaleString("pt-Br", { minimumIntegerDigits: 2 }) }}
+      </button>
+    </li>
+
+    <li>
+      <button
+        class="button-last-page"
+        @click="handlePage(perPage * (totalPages - 1))"
+      >
+        <mdicon name="arrowCollapseRight" size="18" />
+      </button>
+    </li>
   </ul>
 </template>
 
@@ -36,12 +42,13 @@ export default {
     },
     handlePage: Function,
   },
+  components: {},
   computed: {
     pages() {
       /* eslint-disable */
       const current = this.currentPage;
-      const rangePage = 10;
-      const offset = 9;
+      const rangePage = 8;
+      const offset = 7;
       const totalPages = this.totalPages;
       const arrayPages = [];
 
@@ -79,22 +86,44 @@ export default {
 <style lang="scss" scoped>
 .paginator {
   display: flex;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+
   > li {
-    padding: 4px;
-    margin: 4px;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
     border-radius: 4px;
+
+    > span {
+      color: aliceblue;
+      font-size: 12px;
+    }
 
     > button {
       cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      height: 25px;
+      width: 25px;
     }
   }
 
-  .active {
-    background-color: rgb(142, 69, 252);
-  }
-  span {
+  .button-last-page,
+  .button-first-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 45%;
+    background-color: rgba(210, 222, 255, 0.598);
     color: #fff;
-    font-size: 24px;
+  }
+
+  .active {
+    background-color: rgba(210, 222, 255, 0.598);
   }
 }
 </style>
