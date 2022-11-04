@@ -3,7 +3,8 @@
 <!--./.github/app.gif-->
   &#xa0;
 
-  <!-- <a href="https://pokedex.netlify.com">Demo</a> -->
+<a href="https://pokedex-kacyos.vercel.app/">Demo</a>
+
 </div>
 
 <h1 align="center">Pokedex</h1>
