@@ -3,7 +3,75 @@ import { getPokemonSpecie, getEvolutionChain } from "@/services/requests";
 import EvolutionView from "@/components/Evolution.vue";
 </script>
 <template>
-  <transition name="modal">
+  <div class="container mx-auto">
+    <div>
+      <div
+        class="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
+        @click="$emit('close')"
+      >
+        <div
+          class="max-w-2xl md:max-w-md max-h-[80%] overflow-auto p-2 mx-4 bg-white rounded-md shadow-xl"
+        >
+          <div class="flex items-center justify-between">
+            <h1 class="text-3xl">{{ pokemon.name }}</h1>
+            <button
+              @click="isOpen = false"
+              class="w-8 h-8 text-red-500 cursor-pointer"
+            >
+              <mdicon name="closeCircleOutline" />
+            </button>
+          </div>
+
+          <div class="flex flex-col justify-center items-center gap-4 mt-4">
+            <figure
+              class="flex justify-center items-center bg-blue-200 rounded-full h-36 w-36"
+            >
+              <img
+                class="h-32"
+                :src="pokemon.sprites.other['official-artwork'].front_default"
+                :alt="pokemon.name"
+              />
+            </figure>
+            <p class="text-center text-md font-semibold">
+              {{ specie.description }}
+            </p>
+          </div>
+
+          <div class="mt-4 mb-4 bg-gray-200 rounded-md w-full p-2">
+            <h3 class="text-center text-lg font-semibold md:pb-4">Status</h3>
+            <div
+              class="grid md:grid-rows-3 md:grid-cols-2 md:place-content-around"
+            >
+              <div
+                v-for="pokemon in pokemon.stats"
+                class="flex items-center sm:gap-1"
+                :key="pokemon.stat.name"
+              >
+                <mdicon
+                  :class="icon[pokemon?.stat.name].color"
+                  :name="icon[pokemon?.stat.name].icon"
+                  size="18"
+                />
+                <span class="font-semibold px-1">
+                  {{ pokemon.stat.name }}:
+                </span>
+                <span :key="pokemon.base_stat">
+                  {{ pokemon.base_stat }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4" v-if="specie.hasChildren">
+            <h2 class="text-lg font-semibold">Evolutions</h2>
+            <EvolutionView v-bind:items="specie.evolutions" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <transition name="modal">
     <div class="modal-mask">
       <div class="modal-container">
         <div class="modal-body">
@@ -48,7 +116,7 @@ import EvolutionView from "@/components/Evolution.vue";
         </div>
       </div>
     </div>
-  </transition>
+  </transition>-->
 </template>
 
 <script>
@@ -58,17 +126,17 @@ export default {
     return {
       specie: {},
       icon: {
-        hp: "heart",
-        attack: "sword",
-        defense: "shield",
-        "special-attack": "swordCross",
-        "special-defense": "shieldStar",
-        speed: "runFast",
+        hp: { icon: "heart", color: "text-red-500" },
+        attack: { icon: "sword", color: "text-gray-600" },
+        defense: { icon: "shield", color: "text-blue-500" },
+        "special-attack": { icon: "swordCross", color: "text-gray-700" },
+        "special-defense": { icon: "shieldStar", color: "text-blue-700" },
+        speed: { icon: "runFast", color: "text-green-500" },
       },
     };
   },
   components: {
-    EvolutionView,
+    //EvolutionView,
   },
   props: {
     pokemon: Object,
@@ -101,7 +169,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
+/*
 .modal-mask {
   display: flex;
   justify-content: center;
@@ -198,5 +267,5 @@ export default {
 
 .modal-leave-active {
   opacity: 0;
-}
+}*/
 </style>

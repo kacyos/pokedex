@@ -1,17 +1,33 @@
+<script setup></script>
 <template>
-  <div class="card" @click="$emit('click')">
-    <figure class="card--figure">
-      <img :src="image" :alt="name" />
+  <div
+    class="flex flex-col justify-center items-center h-52 md:h-60 w-44 md:w-52 p-2 border rounded-md border-gray-500 bg-lime-50 cursor-pointer hover:scale-125 ease-in duration-300"
+    @click="$emit('click')"
+  >
+    <figure
+      class="flex justify-center items-center h-24 md:h-32 w-24 md:w-32 rounded-full bg-gradient-to-r from-gray-100 to-blue-300"
+    >
+      <img
+        class="object-contain h-24 md:h-28 w-24 md:w-28"
+        :src="image"
+        :alt="name"
+      />
     </figure>
 
-    <h1>{{ name }}</h1>
+    <h1 class="text-lg md:text-2xl text-center pb-4 text-gray-600 font-bold">
+      {{ name }}
+    </h1>
 
-    <div class="card--type">
+    <div class="flex align-center justify-center gap-4">
       <span
         v-for="pokemon in types"
         :key="pokemon.type.slot"
-        :class="pokemon.type.name"
-        >{{ pokemon.type.name }}</span
+        v-bind:class="[
+          'rounded-xl  p-1 text-center text-gray-900 font-bold',
+          pokemon.type.name,
+        ]"
+      >
+        {{ pokemon.type.name }}</span
       >
     </div>
   </div>
@@ -28,87 +44,69 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "../css/variables.scss";
-.card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid rgb(112, 112, 112);
-  box-shadow: 0px 0px 10px rgb(187, 187, 187);
-  border-radius: 10px;
-  height: 150px;
-  width: 120px;
-  background-color: rgba(210, 222, 255, 0.598);
-  cursor: pointer;
-
-  h1 {
-    font-size: calc(1em + 1.1vw);
-  }
+<style scoped>
+.fire {
+  background-color: #ef4444;
 }
-.card--figure {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50%;
-  width: 50%;
-  > img {
-    width: 100%;
-    height: 100%;
-    object-fit: scale-down;
-  }
+.grass {
+  background-color: #22c55e;
+}
+.flying {
+  background-color: #bae6fd;
 }
 
-.card--type {
-  display: flex;
-  gap: 5px;
-  > span {
-    color: rgb(44, 44, 44);
-    font-weight: 500;
-    font-size: calc(0.4em + 1vw);
-    padding: 2.5px;
-    border-radius: 5px;
-  }
-  .fire {
-    background-color: rgb(255, 86, 86, 0.524);
-    color: #fff;
-  }
-  .water {
-    background-color: rgb(92, 173, 255);
-    color: #fff;
-  }
-  .grass {
-    background-color: rgb(1, 176, 1);
-    color: #fff;
-  }
-  .electric {
-    background-color: rgb(255, 255, 0, 0.524);
-    color: rgb(104, 104, 104);
-  }
-  .ground {
-    background-color: rgba(42, 17, 17, 0.524);
-    color: #000;
-  }
+.poison {
+  background-color: #8b5cf6;
+}
+.water {
+  background-color: #3b82f6;
 }
 
-@media (min-width: 768px) {
-  .card {
-    height: 200px;
-    width: 170px;
-  }
+.bug {
+  background-color: #6ee7b7;
 }
 
-@media (min-width: 768px) {
-  .card {
-    height: 200px;
-    width: 170px;
-  }
+.normal {
+  background-color: #dadada;
 }
 
-@media (min-width: 1024px) {
-  .card {
-    height: 250px;
-    width: 220px;
-  }
+.electric {
+  background-color: #eab308;
+}
+
+.dragon {
+  background-color: #fdba74;
+}
+.ghost {
+  background-color: #9333ea;
+}
+.psychic {
+  background-color: #d8b4fe;
+}
+.fairy {
+  background-color: #ddd6fe;
+}
+.rock {
+  background-color: #57534e;
+}
+
+.ground {
+  background-color: #a8a29e;
+}
+
+.dark {
+  background-color: #374151;
+}
+
+.steel {
+  background-color: #9ca3af;
+}
+
+.fighting {
+  background-color: #a1a1aa;
+}
+
+.ice {
+  background-color: #dbebff;
 }
 </style>

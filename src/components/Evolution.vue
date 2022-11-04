@@ -1,14 +1,26 @@
 <template>
   <div class="evotution">
     <ul>
-      <li class="evolution" v-for="node in mapTreeviewNodes" :key="node.id">
+      <li
+        class="flex items-center justify-center gap-2"
+        v-for="node in items"
+        :key="node.id"
+      >
         <div>
-          <img :src="node.imageUrl" alt="" />
-          <span>{{ node.name }}</span>
+          <img
+            class="h-14 w-14 md:h-20 md:w-20 mx-auto"
+            :src="node.imageUrl"
+            :alt="node.name"
+          />
+          <span class="flex justify-center font-semibold">{{ node.name }}</span>
+        </div>
+
+        <div v-if="node.children.length">
+          <mdicon name="arrow-right" size="16" />
         </div>
 
         <EvolutionView
-          class="children"
+          class="flex children"
           v-if="node.children"
           :items="node.children"
           :is-child="true"
@@ -28,49 +40,6 @@ export default {
     items: {
       type: Array,
     },
-    hasChildren: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
-  mounted() {
-    //this.treeviewNodes = this.mapTreeviewNodes(this.items);
-  },
-  computed: {
-    mapTreeviewNodes() {
-      console.log(this.hasChildren);
-      return this.items;
-      /* return this.items.map((item) => ({
-        ...item,
-        isExpanded: false,
-        isSelected: false,
-        children: item.children ? this.mapTreeviewNodes(item.children) : {},
-      }));*/
-    },
   },
 };
 </script>
-
-<style scoped lang="scss">
-.evolution {
-  display: flex;
-  > div {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  img {
-    height: 50px;
-  }
-}
-.children {
-  margin-left: 40px;
-  img {
-    height: 70px;
-    width: 70px;
-  }
-}
-</style>

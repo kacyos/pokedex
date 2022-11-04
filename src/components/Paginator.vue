@@ -1,31 +1,43 @@
 <template>
-  <ul v-if="total > 1" class="paginator">
-    <li>
-      <button class="button-first-page" v-if="currentPage">
-        <mdicon name="arrowCollapseLeft" size="18" />
-      </button>
-    </li>
-
-    <li @click="selectCurrentPage" v-for="page in pages" :key="page">
-      <button @click="handlePage(perPage * (page - 1))">
-        {{ page.toLocaleString("pt-Br", { minimumIntegerDigits: 2 }) }}
-      </button>
-    </li>
-
-    <li>
-      <button
-        class="button-last-page"
-        @click="handlePage(perPage * (totalPages - 1))"
-      >
-        <mdicon name="arrowCollapseRight" size="18" />
-      </button>
-    </li>
-  </ul>
+  <div v-if="total > 1" class="container flex justify-center mx-auto">
+    <ul class="flex">
+      <li @click="selectCurrentPage(1)">
+        <button
+          @click="handlePage"
+          :disabled="currentPage < 8"
+          class="disabled:bg-zinc-400 disabled:text-blue-200 disabled:cursor-not-allowed w-auto h-8 md:h-10 px-1 md:px-5 text-gray-600 bg-white border border-r-0 border-gray-600 rounded-l-md hover:bg-gray-100"
+        >
+          <mdicon name="page-first" size="24" />
+        </button>
+      </li>
+      <li @click="selectCurrentPage(page)" v-for="page in pages" :key="page">
+        <button
+          :class="
+            currentPage == page
+              ? 'w-8 px-1 h-8 md:h-10 md:w-auto md:px-4 text-white bg-blue-900 border border-r-0 border-gray-600'
+              : 'w-8 px-1 h-8 md:h-10 md:w-auto md:px-4 text-gray-600 bg-gray-200 border border-r-0 border-gray-600 hover:bg-blue-300'
+          "
+          @click="handlePage(perPage * (page - 1))"
+        >
+          {{ page }}
+        </button>
+      </li>
+      <li @click="selectCurrentPage(totalPages)">
+        <button
+          :disabled="totalPages == currentPage"
+          class="disabled:bg-zinc-400 disabled:text-blue-200 w-auto px-1 md:h-10 h-8 md:px-5 text-gray-600 bg-white border border-gray-600 rounded-r-md hover:bg-gray-100"
+          @click="handlePage(perPage * (totalPages - 1))"
+        >
+          <mdicon name="page-last" size="24" />
+        </button>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "PaginatorList",
+  name: "PaginatorComponent",
   data() {
     return {
       currentPage: 1,
@@ -42,23 +54,25 @@ export default {
     },
     handlePage: Function,
   },
-  components: {},
+
   computed: {
     pages() {
-      /* eslint-disable */
-      const current = this.currentPage;
+      console.log(this.currentPage);
+      const current = Number(this.currentPage);
       const rangePage = 8;
       const offset = 7;
       const totalPages = this.totalPages;
       const arrayPages = [];
 
       for (let index = 1; index <= totalPages; index++) {
-        arrayPages.push(index);
+        arrayPages.push(
+          index.toLocaleString("pt-Br", { minimumIntegerDigits: 2 })
+        );
       }
 
       arrayPages.splice(0, current - offset);
       arrayPages.splice(rangePage, this.total);
-
+      console.log(arrayPages);
       return arrayPages;
     },
 
@@ -70,60 +84,20 @@ export default {
         : 0;
     },
   },
+
   methods: {
-    selectCurrentPage(event) {
-      const elements = document.querySelectorAll(".active");
-      for (let index = 0; index < elements.length; index++) {
-        elements[index].classList.remove("active");
+    selectCurrentPage(page) {
+      /*
+      if (text === "Início") {
+        this.currentPage = "01";
+        return;
       }
-      this.currentPage = event.target.innerText;
-      event.target.className = "active";
+      if (text === "Fim") {
+        this.currentPage = this.totalPages;
+        return;
+      }*/
+      this.currentPage = page;
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.paginator {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  width: 100%;
-  padding: 20px;
-
-  > li {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
-
-    > span {
-      color: aliceblue;
-      font-size: 12px;
-    }
-
-    > button {
-      cursor: pointer;
-      border: none;
-      border-radius: 4px;
-      height: 25px;
-      width: 25px;
-    }
-  }
-
-  .button-last-page,
-  .button-first-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 45%;
-    background-color: rgba(210, 222, 255, 0.598);
-    color: #fff;
-  }
-
-  .active {
-    background-color: rgba(210, 222, 255, 0.598);
-  }
-}
-</style>
